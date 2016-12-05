@@ -75,6 +75,18 @@ var isReactComponent = function(name) {
   return /^[A-Z]/.test(name);
 }
 
+var unique = function (arr) {
+  var hash = {}, result = [];
+  for (var i = 0, l = arr.length; i < l; ++i ) {
+    if (!hash.hasOwnProperty(arr[i])) {
+      hash[ arr[i] ] = true;
+      result.push(arr[i]);
+    }
+  }
+
+  return result;
+}
+
 // Return {<componentName>: [<listOfComponentsUsed>]}
 var getComponentsUsed = function(jsPath) {
   var code = fs.readFileSync(jsPath).toString();
@@ -95,8 +107,9 @@ var getComponentsUsed = function(jsPath) {
   });
 
   var onlyComponents = jsxElements.filter(isReactComponent);
-  return {[rootComponentName]: onlyComponents};
+  return {[rootComponentName]: unique(onlyComponents)};
 }
+
 
 //============================MAIN===========================
 var dir = "/Users/michaelwest/projects/ambitions/src/components";
